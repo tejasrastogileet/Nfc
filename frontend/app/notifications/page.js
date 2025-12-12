@@ -8,18 +8,20 @@ import { toast } from 'react-hot-toast';
 
 export default function NotificationsPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [notifications, setNotifications] = useState([]);
   const [filter, setFilter] = useState('all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login?redirect=/notifications');
+        return;
+      }
+      fetchNotifications();
     }
-    fetchNotifications();
-  }, [user, filter]);
+  }, [user, authLoading, filter, router]);
 
   const fetchNotifications = async () => {
     try {

@@ -8,7 +8,7 @@ import { toast } from 'react-hot-toast';
 
 export default function UserProfilePage() {
   const router = useRouter();
-  const { user, logout } = useAuth();
+  const { user, logout, loading: authLoading } = useAuth();
   const [profile, setProfile] = useState(null);
   const [addresses, setAddresses] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,13 +22,15 @@ export default function UserProfilePage() {
   const [passwordForm, setPasswordForm] = useState({ currentPassword: '', newPassword: '', confirmPassword: '' });
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login?redirect=/user/profile');
+        return;
+      }
+      fetchProfile();
+      fetchAddresses();
     }
-    fetchProfile();
-    fetchAddresses();
-  }, [user]);
+  }, [user, authLoading, router]);
 
   const fetchProfile = async () => {
     try {

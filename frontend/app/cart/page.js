@@ -11,13 +11,13 @@ import { toast } from 'react-hot-toast';
 export default function CartPage() {
   const router = useRouter();
   const { cartItems, updateQuantity, removeFromCart, getCartTotal } = useCart();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
+    if (!authLoading && !user) {
+      router.push('/login?redirect=/cart');
     }
-  }, [user, router]);
+  }, [user, authLoading, router]);
 
   const handleCheckout = () => {
     if (cartItems.length === 0) {

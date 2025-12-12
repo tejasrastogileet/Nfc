@@ -10,15 +10,19 @@ import { useAuth } from '@/context/AuthContext';
 
 export default function OrdersPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (user) {
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login?redirect=/orders');
+        return;
+      }
       fetchOrders();
     }
-  }, [user]);
+  }, [user, authLoading, router]);
 
   const fetchOrders = async () => {
     try {
@@ -65,7 +69,7 @@ export default function OrdersPage() {
     }
   };
 
-  if (loading) {
+  if (loading || authLoading) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
         Loading orders...

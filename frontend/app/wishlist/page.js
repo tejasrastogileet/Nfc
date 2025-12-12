@@ -10,17 +10,19 @@ import { toast } from 'react-hot-toast';
 
 export default function WishlistPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [wishlist, setWishlist] = useState(null);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login?redirect=/wishlist');
+        return;
+      }
+      fetchWishlist();
     }
-    fetchWishlist();
-  }, [user]);
+  }, [user, authLoading, router]);
 
   const fetchWishlist = async () => {
     try {

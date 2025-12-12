@@ -9,7 +9,7 @@ import { toast } from 'react-hot-toast';
 
 export default function RefundsPage() {
   const router = useRouter();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [requests, setRequests] = useState([]);
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -21,13 +21,15 @@ export default function RefundsPage() {
   });
 
   useEffect(() => {
-    if (!user) {
-      router.push('/login');
-      return;
+    if (!authLoading) {
+      if (!user) {
+        router.push('/login?redirect=/refunds');
+        return;
+      }
+      fetchRefundRequests();
+      fetchOrders();
     }
-    fetchRefundRequests();
-    fetchOrders();
-  }, [user]);
+  }, [user, authLoading, router]);
 
   const fetchRefundRequests = async () => {
     try {
