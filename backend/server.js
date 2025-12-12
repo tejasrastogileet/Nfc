@@ -16,6 +16,13 @@ const orderRoutes = require('./routes/orders');
 const couponRoutes = require('./routes/coupons');
 const adminRoutes = require('./routes/admin');
 const invoiceRoutes = require('./routes/invoice');
+const userRoutes = require('./routes/user');
+const reviewRoutes = require('./routes/reviews');
+const wishlistRoutes = require('./routes/wishlist');
+const notificationRoutes = require('./routes/notifications');
+const refundRoutes = require('./routes/refunds');
+const contentRoutes = require('./routes/content');
+const contactRoutes = require('./routes/contact');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -43,6 +50,13 @@ app.use('/api/orders', orderRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/invoice', invoiceRoutes);
+app.use('/api/user', userRoutes);
+app.use('/api/reviews', reviewRoutes);
+app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/notifications', notificationRoutes);
+app.use('/api/refunds', refundRoutes);
+app.use('/api/content', contentRoutes);
+app.use('/api/contact', contactRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
